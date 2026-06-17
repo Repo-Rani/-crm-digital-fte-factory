@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fte-postgres
+  namespace: customer-success-fte
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fte-postgres
+  template:
+    metadata:
+      labels:
+        app: fte-postgres
+    spec:
+      containers:
+      - name: postgres
+        image: pgvector/pgvector:pg16
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: fte_db
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: fte-secrets
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: fte-secrets
+              key: POSTGRES_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: customer-success-fte
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: fte-postgres

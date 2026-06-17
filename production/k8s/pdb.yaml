@@ -1,0 +1,21 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: fte-api-pdb
+  namespace: customer-success-fte
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: fte-api
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: fte-worker-pdb
+  namespace: customer-success-fte
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: fte-worker

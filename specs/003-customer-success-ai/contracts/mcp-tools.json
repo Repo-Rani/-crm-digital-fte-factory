@@ -1,0 +1,102 @@
+{
+  "tools": [
+    {
+      "name": "search_knowledge_base",
+      "description": "Search product documentation for relevant answers",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" },
+          "max_results": { "type": "integer", "default": 5 },
+          "category": { "type": "string", "enum": ["technical", "billing", "general"] }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "create_ticket",
+      "description": "Log a new customer issue in the memory system",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "customer_id": { "type": "string" },
+          "issue": { "type": "string" },
+          "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+          "channel": { "type": "string", "enum": ["email", "whatsapp", "web_form"] },
+          "customer_name": { "type": "string" },
+          "customer_email": { "type": "string" },
+          "customer_phone": { "type": "string" }
+        },
+        "required": ["customer_id", "issue", "priority", "channel"]
+      }
+    },
+    {
+      "name": "get_customer_history",
+      "description": "Retrieve previous interactions for a customer",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "customer_id": { "type": "string" },
+          "max_messages": { "type": "integer", "default": 10 }
+        },
+        "required": ["customer_id"]
+      }
+    },
+    {
+      "name": "escalate_to_human",
+      "description": "Flag a ticket for human intervention",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": { "type": "string" },
+          "customer_id": { "type": "string" },
+          "reason": { "type": "string", "enum": ["pricing_inquiry", "refund_request", "legal_threat", "negative_sentiment", "human_requested", "profanity_detected", "security_concern", "no_kb_results", "processing_error"] },
+          "priority": { "type": "string", "default": "medium" },
+          "channel": { "type": "string" },
+          "full_context": { "type": "string" }
+        },
+        "required": ["ticket_id", "customer_id", "reason", "channel"]
+      }
+    },
+    {
+      "name": "send_response",
+      "description": "Format and send an outbound response to the customer",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": { "type": "string" },
+          "customer_id": { "type": "string" },
+          "message": { "type": "string" },
+          "channel": { "type": "string", "enum": ["email", "whatsapp", "web_form"] },
+          "customer_name": { "type": "string" }
+        },
+        "required": ["ticket_id", "customer_id", "message", "channel"]
+      }
+    },
+    {
+      "name": "analyze_sentiment",
+      "description": "Calculate sentiment score for a given text",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": { "type": "string" },
+          "customer_id": { "type": "string" }
+        },
+        "required": ["text"]
+      }
+    },
+    {
+      "name": "update_ticket_status",
+      "description": "Update the resolution status of an existing ticket",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "customer_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["open", "pending", "resolved", "escalated"] },
+          "resolution_notes": { "type": "string" }
+        },
+        "required": ["customer_id", "status"]
+      }
+    }
+  ]
+}
